@@ -1,7 +1,16 @@
 "use client";
 
 import React from "react";
-import { ChevronDown, Heart, LogOut, Paperclip, User } from "lucide-react";
+import {
+  ChevronDown,
+  FilePlus,
+  Heart,
+  LayoutDashboard,
+  LogOut,
+  Paperclip,
+  School2Icon,
+  User,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +31,8 @@ const ProfileBar = ({ name }: { name: string }) => {
   const { data: userInfo } = useWebUser();
 
   if (!userInfo) return null;
+
+  console.log(userInfo);
 
   return (
     <DropdownMenu>
@@ -53,12 +64,37 @@ const ProfileBar = ({ name }: { name: string }) => {
           </>
         ) : (
           <>
-            <Link href={"/submit-documents"}>
-              <DropdownMenuItem>
-                <Paperclip className="mr-2 h-4 w-4" />
-                <span>Submit Documents</span>
-              </DropdownMenuItem>
-            </Link>
+            {userInfo.userInfo?.benefactorInfo?.approved ? (
+              <>
+                <Link href={"/dashboard"}>
+                  <DropdownMenuItem>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Admin Dashboard</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href={"/school-profile"}>
+                  <DropdownMenuItem>
+                    <School2Icon className="mr-2 h-4 w-4" />
+                    <span>Edit School Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href={"/add-scholarship"}>
+                  <DropdownMenuItem>
+                    <FilePlus className="mr-2 h-4 w-4" />
+                    <span>Add Scholarship</span>
+                  </DropdownMenuItem>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href={"/view-documents"}>
+                  <DropdownMenuItem>
+                    <Paperclip className="mr-2 h-4 w-4" />
+                    <span>View Status Documents</span>
+                  </DropdownMenuItem>
+                </Link>
+              </>
+            )}
           </>
         )}
         <DropdownMenuSeparator />
