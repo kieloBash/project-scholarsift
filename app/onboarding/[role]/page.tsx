@@ -78,8 +78,8 @@ const OnboardingRole = ({ params }: PageProps) => {
           <div className="flex flex-col mb-4">
             <Label className="text-xl">Verification Information</Label>
             <p className="text-sm text-muted-foreground">
-              Please fill up all the informations below. We'll let you know if
-              your account is verified.
+              {`Please fill up all the informations below. We'll let you know if
+              your account is verified.`}
             </p>
           </div>
           <FormField
