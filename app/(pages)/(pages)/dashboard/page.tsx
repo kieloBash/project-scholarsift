@@ -8,7 +8,7 @@ const DashboardPage = () => {
       <header className="">
         <h1 className="text-2xl font-semibold">Welcome to your Dashboard!</h1>
         <p className="text-muted-foreground text-sm">
-          Here are your insights we've gathered!
+          {`Here are your insights we've gathered!`}
         </p>
       </header>
       <main className="flex-1 grid grid-cols-8 gap-4">
