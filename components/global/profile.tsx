@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ChevronDown, Heart, LogOut, User } from "lucide-react";
+import { ChevronDown, Heart, LogOut, Paperclip, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,10 +13,16 @@ import {
 import Link from "next/link";
 import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import useWebUser from "@/lib/hooks/useWebUser";
 
 const ProfileBar = ({ name }: { name: string }) => {
   const { signOut } = useClerk();
   const router = useRouter();
+
+  const { data: userInfo } = useWebUser();
+
+  if (!userInfo) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,21 +33,34 @@ const ProfileBar = ({ name }: { name: string }) => {
           </div>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 mr-4">
+      <DropdownMenuContent className="w-56 mr-4">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href={"/profile"}>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
-        </Link>
-        <Link href={"/my-favorites"}>
-          <DropdownMenuItem>
-            <Heart className="mr-2 h-4 w-4" />
-            <span>My Favorites</span>
-          </DropdownMenuItem>
-        </Link>
+        {userInfo.role === "Student" ? (
+          <>
+            <Link href={"/profile"}>
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href={"/my-favorites"}>
+              <DropdownMenuItem>
+                <Heart className="mr-2 h-4 w-4" />
+                <span>My Favorites</span>
+              </DropdownMenuItem>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href={"/submit-documents"}>
+              <DropdownMenuItem>
+                <Paperclip className="mr-2 h-4 w-4" />
+                <span>Submit Documents</span>
+              </DropdownMenuItem>
+            </Link>
+          </>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut(() => router.push("/"))}>
           <LogOut className="mr-2 h-4 w-4" />

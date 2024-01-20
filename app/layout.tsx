@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,13 +21,15 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider afterSignInUrl="/dashboard" afterSignUpUrl="/onboarding">
-      <html lang="en">
-        <body
-          className={`${poppins.className} flex flex-col min-h-screen w-full bg-slate-100`}
-        >
-          {children}
-        </body>
-      </html>
+      <QueryProvider>
+        <html lang="en">
+          <body
+            className={`${poppins.className} flex flex-col min-h-screen w-full bg-slate-100`}
+          >
+            {children}
+          </body>
+        </html>
+      </QueryProvider>
     </ClerkProvider>
   );
 }

@@ -30,7 +30,7 @@ export async function createUser({
 
 export async function existingUser({ email }: { email: string }) {
   const data = await prisma.user.findFirst({ where: { email } });
-  if (data) return true;
-  
-  return false;
+  if (data) return data;
+
+  return;
 }
