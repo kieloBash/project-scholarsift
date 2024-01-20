@@ -64,7 +64,7 @@ const ProfileBar = ({ name }: { name: string }) => {
           </>
         ) : (
           <>
-            {userInfo.userInfo?.benefactorInfo?.approved ? (
+            {userInfo?.benefactorInfo?.approved ? (
               <>
                 <Link href={"/dashboard"}>
                   <DropdownMenuItem>

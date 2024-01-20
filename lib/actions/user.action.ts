@@ -1,6 +1,6 @@
 "use server";
 
-import { Role, UserInfo } from "@prisma/client";
+import { Role, University } from "@prisma/client";
 import prisma from "../prisma";
 
 export async function createUser({
@@ -28,16 +28,6 @@ export async function createUser({
     console.log("Error in Creating new User");
     return false;
   }
-
-  const userInfo = await prisma.userInfo.create({
-    data: {
-      user: {
-        connect: {
-          id: newUser.id,
-        },
-      },
-    },
-  });
   let res;
 
   if (role === "Benefactor") {
@@ -48,7 +38,7 @@ export async function createUser({
         staffIDPic: staffIDPic || "",
         user: {
           connect: {
-            id: userInfo.id,
+            id: newUser.id,
           },
         },
       },
@@ -58,7 +48,7 @@ export async function createUser({
       data: {
         user: {
           connect: {
-            id: userInfo.id,
+            id: newUser.id,
           },
         },
       },
@@ -72,10 +62,48 @@ export async function existingUser({ email }: { email: string }) {
   const data = await prisma.user.findFirst({
     where: { email },
     include: {
-      userInfo: { include: { benefactorInfo: true, studentInfo: true } },
+      benefactorInfo: {
+        include: {
+          university: true,
+          scholarships: true,
+        },
+      },
+      studentInfo: true,
     },
   });
   if (data) return data;
 
   return;
+}
+
+export async function createSchool({
+  name,
+  address,
+  description,
+  photo,
+  benefactorId,
+}: {
+  name: string;
+  address: string;
+  description: string;
+  photo: string;
+  benefactorId: string;
+}) {
+  const newData = await prisma.university.create({
+    data: {
+      name,
+      address,
+      description,
+      photo,
+      benefactor: {
+        connect: {
+          id: benefactorId,
+        },
+      },
+    },
+  });
+
+  if (!newData) return false;
+
+  return true;
 }
